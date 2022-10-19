@@ -1,14 +1,24 @@
 package main
 
 import (
-	commonrest "github.com/Napigo/go-account-service/frameworks/rest"
+	"github.com/Napigo/go-account-service/frameworks/rest"
 	"github.com/Napigo/go-account-service/interfaces"
-	"github.com/Napigo/npgcommon"
+
+	"github.com/Napigo/npgc"
 )
 
 func main() {
-	npgcommon.LoadEnv()
+	npgc.Load(".env")
 
-	var restServer interfaces.Framework = commonrest.RestServer{}
+	// List of all servers need to initialzied and run
+	// such as Rest API, grpc, Websocket etc..
+	servers := []interfaces.Framework{
+		rest.RestServer{},
+	}
+
+	for _, server := range servers {
+		server.Run()
+	}
+	var restServer interfaces.Framework = rest.RestServer{}
 	restServer.Run()
 }

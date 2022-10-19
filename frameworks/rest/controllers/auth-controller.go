@@ -5,15 +5,14 @@ import (
 	"time"
 
 	"github.com/Napigo/go-account-service/internals/models"
-	commonauth "github.com/Napigo/npgcommon/auth"
-	commonrest "github.com/Napigo/npgcommon/rest"
+	"github.com/Napigo/npgc"
 	"github.com/gofiber/fiber/v2"
 )
 
 func GetJwtController(c *fiber.Ctx) error {
 	c.SendStatus(200)
 
-	resp := commonrest.RestResponse{Context: c, Payload: "Hello JWT", HTTPStatus: 200, Status: "Success"}
+	resp := npgc.RestResponse{Context: c, Payload: "Hello JWT", HTTPStatus: 200, Status: "Success"}
 	return resp.SendResponse()
 }
 
@@ -26,7 +25,7 @@ func GetTestJwtController(c *fiber.Ctx) error {
 
 	secret := []byte(os.Getenv("JWT_SECRETS"))
 
-	jwtToken := commonauth.JWTBuilder{
+	jwtToken := npgc.JWTBuilder{
 		Expiry:   now.Add(60 * time.Minute).Unix(),
 		IssuedAt: now.Unix(),
 		Issuer:   issuer,
@@ -40,6 +39,6 @@ func GetTestJwtController(c *fiber.Ctx) error {
 	}
 	c.SendStatus(200)
 
-	resp := commonrest.RestResponse{Context: c, Payload: models.SToken{Token: *sToken}, HTTPStatus: 200, Status: "Success"}
+	resp := npgc.RestResponse{Context: c, Payload: models.SToken{Token: *sToken}, HTTPStatus: 200, Status: "Success"}
 	return resp.SendResponse()
 }
